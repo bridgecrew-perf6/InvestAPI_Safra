@@ -5,7 +5,6 @@ using Invest.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace InvestAPI.Controllers
@@ -15,7 +14,7 @@ namespace InvestAPI.Controllers
     public class AcaoController : ControllerBase
     {
         private readonly DataContext _context;
-        protected AcaoServices _acaoServices;
+        protected IAcaoServices _acaoServices;
         public AcaoController(DataContext context)
         {
             _context = context;
@@ -31,9 +30,9 @@ namespace InvestAPI.Controllers
             }
             catch (Exception e) { return BadRequest(e.Message); }
         }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Acao>> Get(int id)
+        
+        [HttpGet("codigo/{id}")]
+        public async Task<ActionResult<Acao>> GetByCodigo(string id)
         {
             try
             {
@@ -42,8 +41,8 @@ namespace InvestAPI.Controllers
             catch (Exception e) { return BadRequest(e.Message); }
         }
 
-        [Route("/razao")]
-        [HttpGet("{razao}")]
+        
+        [HttpGet("razao/{razao}")]
         public async Task<ActionResult<IEnumerable<Acao>>> GetByRazao(string razao)
         {
             try

@@ -72,12 +72,12 @@ namespace Invest.Services.Business
         
         public async Task<ActionResult<IEnumerable<Acao>>> ListarPorRazaoSocial(string razao)
         {
-            return await _context.Acoes.Where(w => w.RazaoSocial.Contains(razao)).ToListAsync();
+            return await _context.Acoes.Where(w => w.RazaoSocial.ToUpper().Contains(razao.ToUpper())).ToListAsync();
         }
 
         public async Task<ActionResult<Acao>> ListarPorId(string Id)
         {
-            return await _context.Acoes.Where(w => w.AcaoId == Id).FirstOrDefaultAsync();
+            return await _context.Acoes.Where(w => w.AcaoId.ToUpper() == Id.ToUpper()).FirstOrDefaultAsync();
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Invest.Repositories.Context;
 using Invest.Services.Business;
+using Invest.Services.Contracts;
 using Invest.Services.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace InvestAPI.Controllers
 {
@@ -10,18 +12,25 @@ namespace InvestAPI.Controllers
     public class VenderAcoesController : Controller
     {
         private readonly DataContext _context;
-        protected OperacaoServices _operacaoServices;
+        protected IOperacaoServices _operacaoServices;
 
         public VenderAcoesController(DataContext context)
         {
             _context = context;
             _operacaoServices = OperacaoServices.GetOperacaoServices(_context);
         }
-        
+
         [HttpPost]
-        public void VenderAcoes([FromBody]VendaVM venda)
+        public void VenderAcoes([FromBody] VendaVM venda)
         {
-            _operacaoServices.VenderAcoes(venda);
+            try
+            {
+                _operacaoServices.VenderAcoes(venda);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
     }
 }

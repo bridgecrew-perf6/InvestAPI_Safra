@@ -4,8 +4,6 @@ using Invest.Services.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace InvestAPI.Controllers
 {
@@ -25,7 +23,14 @@ namespace InvestAPI.Controllers
         [HttpGet]
         public IList<ListaOperacaoVM> ListarOperacoes()
         {
-            return _relatorioServices.ListaDeOperacoes();
+            try
+            {
+                return _relatorioServices.ListaDeOperacoes();
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
     }
 }
