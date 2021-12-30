@@ -2,8 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+	  <GenerateRuntimeConfigurationFiles>True</GenerateRuntimeConfigurationFiles>
+	  <GenerateDependencyFile>true</GenerateDependencyFile>
+	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <UserSecretsId>c08b33ba-73f2-4095-898e-d6d819fe7bc9</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <ApplicationIcon />
+    <OutputType>Exe</OutputType>
+    <StartupObject>InvestAPI.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>

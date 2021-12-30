@@ -28,9 +28,12 @@ namespace InvestAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Safra"));
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API Teste BackEnd Developer", Version = "" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,8 +42,8 @@ namespace InvestAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-//                app.UseSwagger();
-  //              app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "InvestAPI v1"));
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "InvestAPI v1"));
             }
 
             app.UseHttpsRedirection();
@@ -53,6 +56,7 @@ namespace InvestAPI
             {
                 endpoints.MapControllers();
             });
+            
         }
     }
 }

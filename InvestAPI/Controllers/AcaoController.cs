@@ -40,7 +40,6 @@ namespace InvestAPI.Controllers
             }
             catch (Exception e) { return BadRequest(e.Message); }
         }
-
         
         [HttpGet("razao/{razao}")]
         public async Task<ActionResult<IEnumerable<Acao>>> GetByRazao(string razao)
