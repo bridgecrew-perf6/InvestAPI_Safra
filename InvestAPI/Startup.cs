@@ -22,7 +22,7 @@ namespace InvestAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<DataContext>(opt => opt.UseSqlite(Configuration.GetConnectionString("Default")));
+            services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Safra"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
