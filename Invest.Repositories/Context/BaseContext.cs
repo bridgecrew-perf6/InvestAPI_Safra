@@ -7,6 +7,7 @@ namespace Invest.Repositories.Context
         public BaseContext(DbContextOptions<TContext> options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasDefaultSchema("SafraInvest");
             OnModelCreatingPartial(modelBuilder);
         }
 

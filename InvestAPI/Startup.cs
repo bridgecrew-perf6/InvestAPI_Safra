@@ -11,6 +11,12 @@ namespace InvestAPI
 {
     public class Startup
     {
+        private static string Host = "ec2-18-211-41-246.compute-1.amazonaws.com";
+        private static string User = "hhcjncmqsdgdpy";
+        private static string DBname = "daqu3skamvcq6t";
+        private static string Password = "9d2711737db14d0a19382076a094e663be9c96a0cf4a07ce39d67aa33beeddbd";
+        private static string Port = "5432";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -21,8 +27,21 @@ namespace InvestAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connString =
+                string.Format(
+                    "Server={0};Username={1};Database={2};Port={3};Password={4};SSL Mode=Require;Trust Server Certificate=true",
+                    Host,
+                    User,
+                    DBname,
+                    Port,
+                    Password);
             services.AddControllers();
-            services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Safra"));
+            services.AddDbContext<DataContext>(opt => opt.UseNpgsql(connString));
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Invest.Api", Version = "v1" });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -31,6 +50,8 @@ namespace InvestAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Proeventos.Api v1"));
             }
 
             app.UseHttpsRedirection();
@@ -38,6 +59,7 @@ namespace InvestAPI
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseCors(cors => cors.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
             app.UseEndpoints(endpoints =>
             {
