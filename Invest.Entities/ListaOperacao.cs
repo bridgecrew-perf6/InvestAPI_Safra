@@ -1,13 +1,12 @@
-﻿using Invest.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Invest.Services.ViewModel
+namespace Invest.Entities
 {
-    public class ListaOperacaoVM
+    public class ListaOperacao
     {
         public string AcaoId { get; set; }
         public string RazaoSocial { get; set; }
@@ -16,5 +15,6 @@ namespace Invest.Services.ViewModel
         public int Quantidade { get; set; }
         public double ValorAcao { get; set; }
         public double ValorTotal { get; set; }
+
     }
 }

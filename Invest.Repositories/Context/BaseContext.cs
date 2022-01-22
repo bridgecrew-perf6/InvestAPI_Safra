@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Invest.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Invest.Repositories.Context
 {
@@ -9,6 +10,9 @@ namespace Invest.Repositories.Context
         {
             modelBuilder.HasDefaultSchema("SafraInvest");
             OnModelCreatingPartial(modelBuilder);
+
+            modelBuilder.Entity<Operacao>()
+                .HasOne(o => o.acao);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

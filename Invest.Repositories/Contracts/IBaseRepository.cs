@@ -1,18 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Invest.Repositories.Contracts
 {
-    public interface IBaseRepository<TEntity> : IDisposable where TEntity : class
+    public interface IBaseRepository<TEntity> where TEntity : class
     {
-        void Insert(TEntity entity);
-        void Update(TEntity entity);
-        void Delete(TEntity entity);
-        DbSet<TEntity> GetAll();
-        
+        Task<bool> Insert(TEntity entity);
+        Task<bool> Update(TEntity entity);
+        Task<bool>  Delete(TEntity entity);        
     }
 }

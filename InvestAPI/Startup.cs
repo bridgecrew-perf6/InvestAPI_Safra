@@ -1,4 +1,8 @@
+using Invest.Repositories;
 using Invest.Repositories.Context;
+using Invest.Repositories.Contracts;
+using Invest.Services.Business;
+using Invest.Services.Contracts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -35,8 +39,14 @@ namespace InvestAPI
                     DBname,
                     Port,
                     Password);
-            services.AddControllers();
             services.AddDbContext<DataContext>(opt => opt.UseNpgsql(connString));
+            services.AddControllers();
+            services.AddScoped<IAcaoServices, AcaoServices>();
+            services.AddScoped<IAcaoRepository, AcaoRepository>();
+            services.AddScoped<IYahooService, YahooService>();
+            services.AddScoped<IOperacaoServices, OperacaoServices>();
+            services.AddScoped<IOperacaoRepository, OperacaoRepository>();
+            services.AddCors();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Invest.Api", Version = "v1" });

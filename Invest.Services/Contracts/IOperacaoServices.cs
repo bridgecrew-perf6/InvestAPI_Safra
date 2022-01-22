@@ -1,11 +1,14 @@
-﻿using Invest.Entities;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Invest.Entities;
 using Invest.Services.ViewModel;
 
 namespace Invest.Services.Contracts
 {
-    public interface IOperacaoServices : IBaseServices<Operacao>
+    public interface IOperacaoServices
     {
-        bool ComprarAcoes(CompraVM operacao);
-        bool VenderAcoes(VendaVM operacao);
+        Task<bool> ComprarAcoes(CompraVM operacao);
+        Task<bool> VenderAcoes(VendaVM operacao);
+        IList<ListaOperacao> ListarOperacoes();
     }
 }

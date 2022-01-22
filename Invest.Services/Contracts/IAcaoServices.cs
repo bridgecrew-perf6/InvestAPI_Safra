@@ -1,16 +1,15 @@
-﻿using Invest.Entities;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Invest.Entities;
 
 namespace Invest.Services.Contracts
 {
-    public interface IAcaoServices : IBaseServices<Acao>
+    public interface IAcaoServices
     {
-        Task<ActionResult<Acao>> ListarPorId(string Id);
-        Task<ActionResult<IEnumerable<Acao>>> ListarPorRazaoSocial(string razao);
+        Task<Acao[]> ListarTodos();
+        Task<Acao> ListarPorId(string id);
+        Task<Acao[]> ListarPorRazaoSocial(string razao);
+        Task<bool> Inserir(Acao model);
+        Task<bool> Atualizar(Acao model);
+        Task<bool> Deletar(string id);
     }
 }

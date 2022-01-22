@@ -1,83 +1,114 @@
-﻿using Invest.Entities;
-using Invest.Repositories;
-using Invest.Repositories.Context;
-using Invest.Services.Contracts;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
+using Invest.Entities;
+using Invest.Repositories.Contracts;
+using Invest.Services.Contracts;
 
 namespace Invest.Services.Business
 {
-    public class AcaoServices : BaseServices<Acao>, IAcaoServices
+    public class AcaoServices : IAcaoServices
     {
-        protected AcaoRepository _acaoRepository;
-        public AcaoServices(DataContext context) : base(context)
+        protected IAcaoRepository _acaoRepository;
+        public AcaoServices(IAcaoRepository acaoRepository)
         {
-            _context = context;
-            _acaoRepository = AcaoRepository.GetAcaoRepository(_context);
-        }
-        public static AcaoServices GetAcaoServices(DataContext context) { return new AcaoServices(context); }
-
-        public override async Task<ActionResult<IEnumerable<Acao>>> ListarTodos()
-        {
-            return await (from ac in _acaoRepository.GetAll() select ac).ToListAsync();
+            _acaoRepository = acaoRepository;
         }
 
-        public override bool Inserir(Acao entity)
+        public async Task<Acao[]> ListarTodos()
         {
-            if (entity != null)
+            try
             {
-                _context.Acoes.Add(entity);
-                _context.SaveChangesAsync();
-                return true;
+                var acoes = await _acaoRepository.GetAll();
+                if (acoes == null) return null;
+
+                return acoes;
             }
-            else
+            catch (Exception ex)
             {
-                return false;
+                throw new Exception(ex.Message);
             }
         }
 
-        public override bool Atualizar(Acao entity)
+        public async Task<Acao> ListarPorId(string id)
         {
-            if(entity != null)
+            try
             {
-                _context.Acoes.Update(entity);
-                _context.SaveChangesAsync();
-                return true;
+                var acao = await _acaoRepository.GetById(id);
+                if (acao == null) return null;
+
+                return acao;
             }
-            else
+            catch (Exception ex)
             {
-                return false;
+                throw new Exception(ex.Message);
             }
-        }
-        
-        public override bool Deletar(string id)
-        {
-            var entity = _acaoRepository.GetById(id);
-            if (entity != null)
-            {
-                _context.Acoes.Remove(entity.FirstOrDefault());
-                _context.SaveChanges();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        
-        public async Task<ActionResult<IEnumerable<Acao>>> ListarPorRazaoSocial(string razao)
-        {
-            return await _context.Acoes.Where(w => w.RazaoSocial.ToUpper().Contains(razao.ToUpper())).ToListAsync();
         }
 
-        public async Task<ActionResult<Acao>> ListarPorId(string Id)
+        public async Task<Acao[]> ListarPorRazaoSocial(string razao)
         {
-            return await _context.Acoes.Where(w => w.AcaoId.ToUpper() == Id.ToUpper()).FirstOrDefaultAsync();
+            try
+            {
+                var acao = await _acaoRepository.GetByRazao(razao);
+                if (acao == null) return null;
+
+                return acao;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
+        public async Task<bool> Inserir(Acao model)
+        {
+            try
+            {
+                if (model != null)
+                {
+                     return await _acaoRepository.Insert(model);
+                }
+                else
+                {
+                    throw new Exception("Dados invalidos");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> Atualizar(Acao model)
+        {
+            try
+            {
+                if (model != null)
+                {
+                    return await _acaoRepository.Update(model); 
+                }
+                else
+                {
+                    throw new Exception("Dados invalidos");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> Deletar(string id)
+        {
+            try
+            {
+                var acao = await _acaoRepository.GetById(id);
+                if (acao == null) throw new Exception("Ação não localizada");
+                return await _acaoRepository.Delete(acao);                
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }

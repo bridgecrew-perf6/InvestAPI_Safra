@@ -9,6 +9,6 @@ namespace Invest.Repositories.Contracts
 {
     public interface IOperacaoRepository : IBaseRepository<Operacao>
     {
-        
+        IList<ListaOperacao> ListarOperacoes();
     }
 }

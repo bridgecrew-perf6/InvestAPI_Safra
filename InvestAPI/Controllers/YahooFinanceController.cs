@@ -2,6 +2,9 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Invest.Entities;
+using Invest.Services.Contracts;
 
 namespace InvestAPI.Controllers
 {
@@ -9,18 +12,20 @@ namespace InvestAPI.Controllers
     [ApiController]
     public class YahooFinanceController : Controller
     {
+        protected IYahooService _yahooService;
+
+        public YahooFinanceController(IYahooService yahooService)
+        {
+            _yahooService = yahooService;
+        }
+
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<string>> Get(string id)
+        public async Task<IActionResult> Get(string id)
         {
             try
             {
-                var httpClient = new HttpClient();
-                httpClient.BaseAddress = new Uri("https://yfapi.net/");
-                httpClient.DefaultRequestHeaders.Add("X-API-KEY", "0eCCvnCD7I5CHgn9GLZS0atmzEBGsd3O6ZL2CHVy");
-                httpClient.DefaultRequestHeaders.Add("accept", "application/json");
-
-                var response = await httpClient.GetAsync("v6/finance/quote?symbols=" + id);
-                return await response.Content.ReadAsStringAsync();
+                return Ok(await _yahooService.Cotacao(id));
             }
             catch (Exception e)
             {

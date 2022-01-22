@@ -1,31 +1,73 @@
-﻿using Invest.Entities;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Invest.Entities;
 using Invest.Repositories.Context;
 using Invest.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Invest.Repositories
 {
-    public class AcaoRepository : BaseRepository<Acao>, IAcaoRepository
+    public class AcaoRepository : IAcaoRepository
     {
-        public AcaoRepository(DataContext context) : base(context)
+        private readonly DataContext _context;
+
+        public AcaoRepository(DataContext context)
         {
             _context = context;
         }
-        public static AcaoRepository GetAcaoRepository(DataContext context) { return new AcaoRepository(context); }
 
-        public IQueryable<Acao> GetById(string id)
+        public async Task<Acao[]> GetAll()
         {
-            return _context.Acoes.Where(w => w.AcaoId == id);
+            try
+            {
+                return await _context.Acoes.OrderBy(e => e.AcaoId).ToArrayAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public IQueryable<Acao> GetByRazao(string razao)
+        public async Task<Acao> GetById(string id)
         {
-            return _context.Acoes.Where(a => a.RazaoSocial.Contains(razao));
+            try
+            {
+                return await _context.Acoes.Where(w => w.AcaoId == id).FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
+
+        public async Task<Acao[]> GetByRazao(string razao)
+        {
+            try
+            {
+                return await _context.Acoes.OrderBy(e => e.AcaoId).Where(a => a.RazaoSocial.Contains(razao)).ToArrayAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> Insert(Acao entity)
+        {
+            _context.Add<Acao>(entity);
+            return (await _context.SaveChangesAsync()) > 0;
+        }
+
+        public async Task<bool> Update(Acao entity)
+        {
+            _context.Update<Acao>(entity);
+            return (await _context.SaveChangesAsync()) > 0;
+        }
+        public async Task<bool> Delete(Acao entity)
+        {
+            _context.Remove<Acao>(entity);
+            return (await _context.SaveChangesAsync()) > 0;
+        }        
     }
 }

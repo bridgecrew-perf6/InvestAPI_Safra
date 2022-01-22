@@ -1,6 +1,5 @@
-﻿using Invest.Repositories.Context;
-using Invest.Services.Business;
-using Invest.Services.ViewModel;
+﻿using Invest.Entities;
+using Invest.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,23 +10,22 @@ namespace InvestAPI.Controllers
     [ApiController]
     public class ListaOperacaoController : Controller
     {
-        private readonly DataContext _context;
-        protected RelatorioServices _relatorioServices;
+        protected IOperacaoServices _relatorioServices;
 
-        public ListaOperacaoController(DataContext context)
+        public ListaOperacaoController(IOperacaoServices operacaoServices)
         {
-            _context = context;
-            _relatorioServices = RelatorioServices.GetRelatorioServices(_context);
+            _relatorioServices = operacaoServices;
         }
 
         [HttpGet]
-        public IList<ListaOperacaoVM> ListarOperacoes()
+        public IList<ListaOperacao> ListarOperacoes()
         {
             try
             {
-                return _relatorioServices.ListaDeOperacoes();
+                var lista = _relatorioServices.ListarOperacoes();
+                return lista;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw new Exception(e.Message);
             }

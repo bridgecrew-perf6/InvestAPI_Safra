@@ -1,57 +1,86 @@
-﻿using Invest.Entities;
-using Invest.Repositories;
-using Invest.Repositories.Context;
+﻿using System;
+using Invest.Entities;
+using Invest.Repositories.Contracts;
 using Invest.Services.Contracts;
 using Invest.Services.ViewModel;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Invest.Services.Business
 {
-    public class OperacaoServices : BaseServices<Operacao>, IOperacaoServices
+    public class OperacaoServices : IOperacaoServices
     {
-        //protected OperacaoRepository _operacaoRepository;
-        public OperacaoServices(DataContext context) : base(context)
+        private IOperacaoRepository _operacaoRepository;
+        public OperacaoServices(IOperacaoRepository operacaoRepository)
         {
-            _context = context;
-            //_operacaoRepository = OperacaoRepository.GetOperacaoRepository(_context);
+            _operacaoRepository = operacaoRepository;
         }
-        public static OperacaoServices GetOperacaoServices(DataContext context) { return new OperacaoServices(context); }
-        public bool ComprarAcoes(CompraVM compra)
+
+        public async Task<bool> ComprarAcoes(CompraVM compra)
         {
-            if (compra != null)
+            try
             {
-                var operacao = new Operacao();
-                operacao.TipoOperacao = TipoOperacao.COMPRA;
-                operacao.OperacaoId = compra.OperacaoId;
-                operacao.AcaoId = compra.AcaoId;
-                operacao.PrecoAcao = compra.Preco;
-                operacao.Quantidade = compra.Qtd;
-                _context.Operacoes.Add(operacao);
-                _context.SaveChanges();
-                return true;
+                if (compra != null)
+                {
+                    var operacao = new Operacao();
+                    operacao.TipoOperacao = TipoOperacao.COMPRA;
+                    operacao.OperacaoId = compra.OperacaoId;
+                    operacao.AcaoId = compra.AcaoId;
+                    operacao.PrecoAcao = compra.Preco;
+                    operacao.Quantidade = compra.Qtd;
+                    operacao.Data = DateTime.Now;
+//                    operacao.CustoOperacao = 5.00 + (0.0325 * operacao.PrecoAcao / 100);
+                    operacao.Total = (operacao.PrecoAcao * operacao.Quantidade) + (5.00 + (0.0325 * operacao.PrecoAcao / 100));
+                    return await _operacaoRepository.Insert(operacao);
+                }
+                else
+                {
+                    throw new Exception("Problemas para realizar a transação");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return false;
+                throw new Exception(ex.Message);
             }
         }
 
-        public bool VenderAcoes(VendaVM venda)
+        public IList<ListaOperacao> ListarOperacoes()
         {
-            if(venda !=null)
+            try
             {
-                var operacao = new Operacao();
-                operacao.OperacaoId = venda.OperacaoId;
-                operacao.AcaoId = venda.AcaoId;
-                operacao.PrecoAcao = venda.Preco;
-                operacao.Quantidade = venda.Qtd;
-                operacao.TipoOperacao = TipoOperacao.VENDA;
-                _context.Operacoes.Add(operacao);
-                _context.SaveChanges();
-                return true;
+                return _operacaoRepository.ListarOperacoes();                
             }
-            else
+            catch (Exception ex)
             {
-                return false;
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> VenderAcoes(VendaVM venda)
+        {
+            try
+            {
+                if (venda != null)
+                {
+                    var operacao = new Operacao();
+                    operacao.OperacaoId = venda.OperacaoId;
+                    operacao.AcaoId = venda.AcaoId;
+                    operacao.PrecoAcao = venda.Preco;
+                    operacao.Quantidade = venda.Qtd;
+                    operacao.TipoOperacao = TipoOperacao.VENDA;
+                    operacao.Data = DateTime.Now;
+  //                  operacao.CustoOperacao = 5.00 + (0.0325 * operacao.PrecoAcao / 100);
+                    operacao.Total = (operacao.PrecoAcao * operacao.Quantidade) + (5.00 + (0.0325 * operacao.PrecoAcao / 100));
+                    return await _operacaoRepository.Insert(operacao);
+                }
+                else
+                {
+                    throw new Exception("Problemas para realizar a transação");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
     }

@@ -1,9 +1,9 @@
-﻿using Invest.Repositories.Context;
-using Invest.Services.Business;
+﻿using System;
+using System.Threading.Tasks;
 using Invest.Services.Contracts;
 using Invest.Services.ViewModel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace InvestAPI.Controllers
 {
@@ -11,24 +11,30 @@ namespace InvestAPI.Controllers
     [ApiController]
     public class ComprarAcoesController : Controller
     {
-        private readonly DataContext _context;
         protected IOperacaoServices _operacaoServices;
-        public ComprarAcoesController(DataContext context)
+        public ComprarAcoesController(IOperacaoServices operacaoServices)
         {
-            _context = context;
-            _operacaoServices = OperacaoServices.GetOperacaoServices(_context);
+            _operacaoServices = operacaoServices;
         }
 
         [HttpPost]
-        public void ComprarAcoes([FromBody] CompraVM compra)
+        public async Task<IActionResult> ComprarAcoes([FromBody] CompraVM compra)
         {
             try
             {
-                _operacaoServices.ComprarAcoes(compra);
+                if (await _operacaoServices.ComprarAcoes(compra))
+                {
+                    return Ok(true);
+                }
+                else
+                {
+                    return BadRequest("Problemas para realizar a operação");
+                }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception(e.Message);
+                return this.StatusCode(StatusCodes.Status500InternalServerError,
+                        $"Erro ao tentar recuperar os Eventos. Erro: {ex.Message}");
             }
         }
     }
