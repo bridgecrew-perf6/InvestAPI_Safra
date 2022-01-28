@@ -12,7 +12,8 @@ namespace InvestAPI.Controllers
     public class AcaoController : ControllerBase
     {
 //        private readonly DataContext _context;
-        protected IAcaoServices _acaoServices;
+        private readonly IAcaoServices _acaoServices;
+
         public AcaoController(IAcaoServices acaoServices)
         {
             _acaoServices = acaoServices;

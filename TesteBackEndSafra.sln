@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvestAPI", "InvestAPI\InvestAPI.csproj", "{1ADC0697-E164-48CF-9215-D1DA2253A47F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InvestAPI", "InvestAPI\InvestAPI.csproj", "{1ADC0697-E164-48CF-9215-D1DA2253A47F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Invest.Repositories", "Invest.Repositories\Invest.Repositories.csproj", "{75EBA316-1988-4F15-A254-71C08F933A69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Invest.Repositories", "Invest.Repositories\Invest.Repositories.csproj", "{75EBA316-1988-4F15-A254-71C08F933A69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Invest.Entities", "Invest.Entities\Invest.Entities.csproj", "{89A06CAC-FEA3-4E48-99D2-D7D6E7E37AA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Invest.Entities", "Invest.Entities\Invest.Entities.csproj", "{89A06CAC-FEA3-4E48-99D2-D7D6E7E37AA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Invest.Services", "Invest.Services\Invest.Services.csproj", "{03597B1B-1A16-44E7-BDF4-2BBA38F7A38A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Invest.Services", "Invest.Services\Invest.Services.csproj", "{03597B1B-1A16-44E7-BDF4-2BBA38F7A38A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
