@@ -2,10 +2,13 @@
 
 namespace Invest.Repositories.Contracts
 {
-    public interface IBaseRepository<TEntity> where TEntity : class
+    public interface IBaseRepository 
     {
-        Task<bool> Insert(TEntity entity);
-        Task<bool> Update(TEntity entity);
-        Task<bool>  Delete(TEntity entity);        
+        void Add<T>(T entity) where T : class;
+        void Update<T>(T entity) where T : class;
+        void Delete<T>(T entity) where T : class;
+        void DeleteRange<T>(T[] entity) where T : class;
+        Task<bool> SaveChangesAsync();
+        Task<object> GetAll();
     }
 }

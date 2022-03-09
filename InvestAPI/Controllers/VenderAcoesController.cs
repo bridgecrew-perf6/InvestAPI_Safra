@@ -23,7 +23,7 @@ namespace InvestAPI.Controllers
         {
             try
             {
-                if (await _operacaoServices.VenderAcoes(venda))
+                if (_operacaoServices.VenderAcoes(venda))
                 {
                     return Ok(true);
                 }

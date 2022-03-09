@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Invest.Entities;
 using Invest.Services.Contracts;
+using Invest.Services.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +11,6 @@ namespace InvestAPI.Controllers
     [ApiController]
     public class AcaoController : ControllerBase
     {
-//        private readonly DataContext _context;
         private readonly IAcaoServices _acaoServices;
 
         public AcaoController(IAcaoServices acaoServices)
@@ -24,99 +23,93 @@ namespace InvestAPI.Controllers
         {
             try
             {
-                var acoes = await _acaoServices.ListarTodos();
-                if (acoes == null) return NotFound("Nenhum evento encontrado");
-                return Ok(acoes);
+                var acao = await _acaoServices.ListarTodos();
+                if (acao == null) return NotFound("Nenhum evento encontrado");
+                return Ok(acao);
             }
             catch (Exception ex)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
-                        $"Erro ao tentar recuperar os Eventos. Erro: {ex.Message}");
+                        $"Erro ao tentar recuperar a Ação. Erro: {ex.Message}");
             }
         }
 
-        [HttpGet("codigo/{id}")]
-        public async Task<IActionResult> GetByCodigo(string id)
+        [HttpGet("Codigo/{acaoId}")]
+        public async Task<IActionResult> GetByCodigo(string acaoId)
         {
             try
             {
-                var acoes = await _acaoServices.ListarPorId(id);
+                var acoes = await _acaoServices.ListarPorAcaoId(acaoId);
                 if (acoes == null) return NotFound("Nenhum evento encontrado");
                 return Ok(acoes);
             }
             catch (Exception ex)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
-                        $"Erro ao tentar recuperar os Eventos. Erro: {ex.Message}");
+                        $"Erro ao tentar recuperar a Ação. Erro: {ex.Message}");
             }
         }
 
-        [HttpGet("razao/{razao}")]
+        [HttpGet("Razao/{razao}")]
         public async Task<IActionResult> GetByRazao(string razao)
         {
             try
             {
-                var acoes = await _acaoServices.ListarPorRazaoSocial(razao);
+                var acoes = await _acaoServices.ListarPorRazao(razao);
                 if (acoes == null) return NotFound("Nenhum evento encontrado");
                 return Ok(acoes);
             }
             catch (Exception ex)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
-                        $"Erro ao tentar recuperar os Eventos. Erro: {ex.Message}");
+                        $"Erro ao tentar recuperar a Ação. Erro: {ex.Message}");
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Acao acao)
+        public async Task<IActionResult> Post(AcaoVM acao)
         {
             try
             {
-                if (await _acaoServices.Inserir(acao))
-                {
-                    return Ok(true);
-                }
-                else
-                {
-                    return BadRequest("Problemas para incluir a Ação");
-                }
+                var acaoInserida = await _acaoServices.Inserir(acao);
+                if (acaoInserida == null) return BadRequest("Erro ao tentar adicionar evento");
+                return Ok(acaoInserida);                                
             }
             catch (Exception ex)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
-                        $"Erro ao tentar recuperar os Eventos. Erro: {ex.Message}");
+                        $"Erro ao tentar recuperar a Ação. Erro: {ex.Message}");
             }
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(Acao acao)
+        public async Task<IActionResult> Put(AcaoVM acao)
         {
             try
             {
-                if (await _acaoServices.Atualizar(acao))
-                {
-                    return Ok(true);
-                }
-                else
-                {
-                    return BadRequest("Problemas para incluir a Ação");
-                }
+                var acaoAtualizada = await _acaoServices.Atualizar(acao);
+                if (acaoAtualizada == null) return BadRequest("Erro ao tentar adicionar evento");
+                return Ok(acaoAtualizada);
             }
             catch (Exception ex)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
-                        $"Erro ao tentar recuperar os Eventos. Erro: {ex.Message}");
+                        $"Erro ao tentar recuperar a Ação. Erro: {ex.Message}");
             }
         }
 
         [HttpDelete("{id}")]
-        public async Task<bool> Delete(string id)
+        public async Task<IActionResult> Delete(string id)
         {
             try
             {
-                return await _acaoServices.Deletar(id);
+                return Ok(await _acaoServices.Deletar(id));
             }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError,
+                        $"Erro ao tentar recuperar a Ação. Erro: {ex.Message}");
+            }
         }
     }
 }

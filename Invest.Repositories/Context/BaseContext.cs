@@ -1,4 +1,4 @@
-﻿using Invest.Entities;
+﻿using Invest.Entities.Configurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Invest.Repositories.Context
@@ -9,10 +9,10 @@ namespace Invest.Repositories.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("SafraInvest");
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AcaoConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(OperacaoConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(TipoOperacaoConfiguration).Assembly);
             OnModelCreatingPartial(modelBuilder);
-
-            modelBuilder.Entity<Operacao>()
-                .HasOne(o => o.acao);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

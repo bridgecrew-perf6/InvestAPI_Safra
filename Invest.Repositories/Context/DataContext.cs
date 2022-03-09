@@ -1,10 +1,5 @@
-﻿using Invest.Entities;
+﻿using Invest.Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Invest.Repositories.Context
 {
@@ -13,5 +8,6 @@ namespace Invest.Repositories.Context
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         public DbSet<Acao> Acoes { get; set; }
         public DbSet<Operacao> Operacoes { get; set; }
+        public DbSet<TipoOperacao> TipoOperacoes { get; set; }
     }
 }

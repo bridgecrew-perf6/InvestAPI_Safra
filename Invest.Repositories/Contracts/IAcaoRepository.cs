@@ -1,12 +1,11 @@
-﻿using Invest.Entities;
+﻿using Invest.Entities.Models;
 using System.Threading.Tasks;
 
 namespace Invest.Repositories.Contracts
 {
-    public interface IAcaoRepository : IBaseRepository<Acao>
+    public interface IAcaoRepository : IBaseRepository
     {
-        Task<Acao[]> GetAll();
-        Task<Acao> GetById(string id);
         Task<Acao[]> GetByRazao(string razao);
+        Task<Acao> GetByAcaoId(string acaoId);
     }
 }

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
 
 namespace InvestAPI
 {
@@ -40,8 +41,14 @@ namespace InvestAPI
                     Port,
                     Password);
             services.AddDbContext<DataContext>(opt => opt.UseNpgsql(connString));
-            services.AddControllers();
+            services.AddControllers()
+                    .AddNewtonsoftJson(
+                        x => x.SerializerSettings.ReferenceLoopHandling =
+                            Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                    );
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());            
             services.AddScoped<IAcaoServices, AcaoServices>();
+            services.AddScoped<IBaseRepository, BaseRepository>();
             services.AddScoped<IAcaoRepository, AcaoRepository>();
             services.AddScoped<IYahooService, YahooService>();
             services.AddScoped<IOperacaoServices, OperacaoServices>();

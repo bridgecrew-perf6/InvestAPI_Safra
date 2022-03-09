@@ -17,18 +17,18 @@ namespace InvestAPI.Controllers
             _relatorioServices = operacaoServices;
         }
 
-        [HttpGet]
-        public IList<ListaOperacao> ListarOperacoes()
-        {
-            try
-            {
-                var lista = _relatorioServices.ListarOperacoes();
-                return lista;
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
+        //[HttpGet]
+        //public IList<ListaOperacao> ListarOperacoes()
+        //{
+        //    try
+        //    {
+        //        var lista = _relatorioServices.ListarOperacoes();
+        //        return lista;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw new Exception(e.Message);
+        //    }
+        //}
     }
 }
